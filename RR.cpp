@@ -1,42 +1,47 @@
 #include <bits/stdc++.h>
 using namespace std;
-#include "utilities.cpp"
 
-struct Arrival
-{
-  bool operator()(const process &a, const process &b)
-  {
-    return a.arrival > b.arrival;
-  }
-};
+#include "FCFS.cpp"
 
-task fcfs(task t)
+task rr(task t)
 {
   int time = -1;
-  map<int, int> arrival_time;         // key: time, value: process idx
+  map<int, int> arrival_time;                     // key: time, value: process idx
+  vector<string> policy_q = split(t.policy, '-'); // split 2-4 into "2", "4"
+  int q = stoi(policy_q[1]);                      // get q
+
   for (int i = 0; i < t.p_count; i++) // save arrival time for each process
   {
     arrival_time[t.processes[i].arrival] = i;
   }
 
-  priority_queue<process, vector<process>, Arrival> ready_run;
+  queue<process> ready_run;
 
   while (time <= t.len)
   {
     if (!ready_run.empty())
     {
-      process temp = ready_run.top();
+      process temp = ready_run.front();
       ready_run.pop();
-      while (temp.rem != 0)
+      int rest = q;
+      while (temp.rem != 0 && rest != 0)
       {
+        rest--;
         temp.rem--;
         temp.status[time] = '*';
         time++;
         if (check_arrival(time, arrival_time))
           ready_run.push(t.processes[arrival_time[time]]);
       }
-      temp.finish = time;
-      t.processes[temp.idx] = temp;
+      if (temp.rem == 0)
+      {
+        temp.finish = time;
+        t.processes[temp.idx] = temp;
+      }
+      else
+      {
+        ready_run.push(temp);
+      }
     }
     else
     {

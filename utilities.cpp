@@ -24,18 +24,24 @@ typedef struct
 } task;
 
 
-int turnaround(process p)
+int turnaround(process &p)
 {
   return p.finish - p.arrival;
 }
 
-float norm_turn(process p)
+float norm_turn(process &p)
 {
   float value = turnaround(p) / (float)p.service;
   return round(value * 100) / 100;
 }
 
-vector<string> split(const string &s, char delimiter)
+bool check_arrival(int time, map<int,int> &arrival_time)
+{
+     return (arrival_time.find(time) != arrival_time.end());
+}
+
+
+vector<string> split(string s, char delimiter)
 {
   vector<string> tokens;
   stringstream ss(s);
@@ -60,9 +66,9 @@ process init_process(vector<string> line, int index)
   return temp;
 }
 
-void print_trace(task t)
+void print_trace(task &t)
 {
-  cout << algo[(t.policy[0] - '1')] << "  ";
+  cout << algo[(t.policy[0] - '1')] << "-1  ";
   for (int i = 0; i <= t.len; ++i)
   {
     cout << (i % 10) << " ";
@@ -86,7 +92,7 @@ void print_trace(task t)
   cout<<"\n\n";
 }
 
-void print_stats(task t)
+void print_stats(task &t)
 {
     cout << algo[(t.policy[0] - '1')] << endl;
     cout << "Process    |";
@@ -132,4 +138,26 @@ void print_stats(task t)
     mean_norm/=t.p_count;
     cout << fixed << setprecision(2) << setw(5) << mean_norm << "|" << endl;
     cout<<"\n\n";
+}
+
+
+void print_task(task &t) {
+    cout << "Type: " << t.type << endl;
+    cout << "Policy: " << t.policy << endl;
+    cout << "Timeline Length: " << t.len << endl;
+    cout << "Process Count: " << t.p_count << endl;
+
+    cout << "Processes:\n";
+    cout << "-----------------------------------------------\n";
+    cout << "Idx | Name | Arrival | Service | Finish | Rem\n";
+    cout << "-----------------------------------------------\n";
+    for (auto p : t.processes) {
+        cout << setw(3) << p.idx << " | "
+             << setw(4) << p.name << " | "
+             << setw(7) << p.arrival << " | "
+             << setw(7) << p.service << " | "
+             << setw(6) << p.finish << " | "
+             << setw(3) << p.rem << "\n";
+    }
+    cout << "-----------------------------------------------\n";
 }
