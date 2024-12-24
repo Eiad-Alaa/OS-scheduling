@@ -35,10 +35,6 @@ float norm_turn(process &p)
   return round(value * 100) / 100;
 }
 
-bool check_arrival(int time, map<int,int> &arrival_time)
-{
-     return (arrival_time.find(time) != arrival_time.end());
-}
 
 int dcmp(double a, double b)
 {

@@ -6,13 +6,13 @@ using namespace std;
 task rr(task t)
 {
   int time = -1;
-  map<int, int> arrival_time;                     // key: time, value: process idx
   vector<string> policy_q = split(t.policy, '-'); // split 2-4 into "2", "4"
   int q = stoi(policy_q[1]);                      // get q
+  vector<vector<int>> time_p(t.len + 3);
 
-  for (int i = 0; i < t.p_count; i++) // save arrival time for each process
+  for (auto p : t.processes)
   {
-    arrival_time[t.processes[i].arrival] = i;
+    time_p[p.arrival].push_back(p.idx);
   }
 
   queue<process> ready_run;
@@ -30,8 +30,10 @@ task rr(task t)
         temp.rem--;
         temp.status[time] = '*';
         time++;
-        if (check_arrival(time, arrival_time))
-          ready_run.push(t.processes[arrival_time[time]]);
+        for (auto id : time_p[time])
+        {
+          ready_run.push(t.processes[id]);
+        }
       }
       if (temp.rem == 0)
       {
@@ -46,8 +48,10 @@ task rr(task t)
     else
     {
       time++;
-      if (check_arrival(time, arrival_time))
-        ready_run.push(t.processes[arrival_time[time]]);
+      for (auto id : time_p[time])
+      {
+        ready_run.push(t.processes[id]);
+      }
     }
   }
   return t;

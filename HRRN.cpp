@@ -18,16 +18,17 @@ struct Ratio
   {
     int cmp = dcmp(hrrn_ratio(a), hrrn_ratio(b));
     // cout<<htime<<" --> "<<a.name<<" "<<hrrn_ratio(a)<<"---"<<b.name<<" "<<hrrn_ratio(b)<<"\n";
-    return (cmp==1?true:(cmp==-1?false:a.arrival > b.arrival));
+    return (cmp == 1 ? true : (cmp == -1 ? false : a.arrival > b.arrival));
   }
 };
 
 task hrrn(task t)
 {
-  map<int, int> arrival_time;         // key: time, value: process idx
-  for (int i = 0; i < t.p_count; i++) // save arrival time for each process
+  vector<vector<int>> time_p(t.len + 3);
+
+  for (auto p : t.processes)
   {
-    arrival_time[t.processes[i].arrival] = i;
+    time_p[p.arrival].push_back(p.idx);
   }
 
   deque<process> ready_run;
@@ -44,8 +45,10 @@ task hrrn(task t)
         temp.rem--;
         temp.status[htime] = '*';
         htime++;
-        if (check_arrival(htime, arrival_time))
-          ready_run.push_back(t.processes[arrival_time[htime]]);
+        for (auto id : time_p[htime])
+        {
+          ready_run.push(t.processes[id]);
+        }
       }
       temp.finish = htime;
       t.processes[temp.idx] = temp;
@@ -53,8 +56,10 @@ task hrrn(task t)
     else
     {
       htime++;
-      if (check_arrival(htime, arrival_time))
-        ready_run.push_back(t.processes[arrival_time[htime]]);
+      for (auto id : time_p[htime])
+      {
+        ready_run.push(t.processes[id]);
+      }
     }
   }
   return t;

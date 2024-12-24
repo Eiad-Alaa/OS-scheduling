@@ -2,38 +2,33 @@
 using namespace std;
 #include "utilities.cpp"
 
-struct Arrival
-{
-  bool operator()(const process &a, const process &b)
-  {
-    return a.arrival > b.arrival;
-  }
-};
-
 task fcfs(task t)
 {
   int time = -1;
-  map<int, int> arrival_time;         // key: time, value: process idx
-  for (int i = 0; i < t.p_count; i++) // save arrival time for each process
+  vector<vector<int>> time_p(t.len + 3);
+
+  for (auto p : t.processes)
   {
-    arrival_time[t.processes[i].arrival] = i;
+    time_p[p.arrival].push_back(p.idx);
   }
 
-  priority_queue<process, vector<process>, Arrival> ready_run;
+  queue<process> ready_run;
 
   while (time <= t.len)
   {
     if (!ready_run.empty())
     {
-      process temp = ready_run.top();
+      process temp = ready_run.front();
       ready_run.pop();
       while (temp.rem != 0)
       {
         temp.rem--;
         temp.status[time] = '*';
         time++;
-        if (check_arrival(time, arrival_time))
-          ready_run.push(t.processes[arrival_time[time]]);
+        for (auto id : time_p[time])
+        {
+          ready_run.push(t.processes[id]);
+        }
       }
       temp.finish = time;
       t.processes[temp.idx] = temp;
@@ -41,8 +36,10 @@ task fcfs(task t)
     else
     {
       time++;
-      if (check_arrival(time, arrival_time))
-        ready_run.push(t.processes[arrival_time[time]]);
+      for (auto id : time_p[time])
+      {
+        ready_run.push(t.processes[id]);
+      }
     }
   }
   return t;

@@ -14,10 +14,11 @@ struct Shortest
 task srt(task t)
 {
   int time = -1;
-  map<int, int> arrival_time;         // key: time, value: process idx
-  for (int i = 0; i < t.p_count; i++) // save arrival time for each process
+  vector<vector<int>> time_p(t.len + 3);
+
+  for (auto p : t.processes)
   {
-    arrival_time[t.processes[i].arrival] = i;
+    time_p[p.arrival].push_back(p.idx);
   }
 
   priority_queue<process, vector<process>, Shortest> ready_run;
@@ -31,8 +32,10 @@ task srt(task t)
       temp.rem--;
       temp.status[time] = '*';
       time++;
-      if (check_arrival(time, arrival_time))
-        ready_run.push(t.processes[arrival_time[time]]);
+      for (auto id : time_p[time])
+      {
+        ready_run.push(t.processes[id]);
+      }
       if (temp.rem == 0)
       {
         temp.finish = time;
@@ -44,8 +47,10 @@ task srt(task t)
     else
     {
       time++;
-      if (check_arrival(time, arrival_time))
-        ready_run.push(t.processes[arrival_time[time]]);
+      for (auto id : time_p[time])
+      {
+        ready_run.push(t.processes[id]);
+      }
     }
   }
   return t;
