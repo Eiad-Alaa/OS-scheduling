@@ -23,34 +23,6 @@ typedef struct
   vector<process> processes;
 } task;
 
-void print_trace(task t)
-{
-  cout << algo[(t.policy[0] - '1')] << "  ";
-  for (int i = 0; i <= t.len; ++i)
-  {
-    cout << (i % 10) << " ";
-  }
-  cout << endl;
-  cout << string(t.len * 2 + 5, '-') << endl;
-  for (const auto &p : t.processes)
-  {
-    cout << p.name << "     ";
-    for (int i = 0; i < t.len; i++)
-    {
-      cout << "|";
-      if (i >= p.arrival && i < p.finish)
-        (p.status[i] == '*') ? cout << '*' : cout << '.';
-      else
-        cout << ' ';
-    }
-    cout << "|" << endl;
-  }
-  cout << string(t.len * 2 + 5, '-') << endl;
-}
-
-void print_stats(task t)
-{
-}
 
 int turnaround(process p)
 {
@@ -86,4 +58,78 @@ process init_process(vector<string> line, int index)
   temp.service = stoi(line[2]);
   temp.rem = stoi(line[2]);
   return temp;
+}
+
+void print_trace(task t)
+{
+  cout << algo[(t.policy[0] - '1')] << "  ";
+  for (int i = 0; i <= t.len; ++i)
+  {
+    cout << (i % 10) << " ";
+  }
+  cout << endl;
+  cout << string(t.len * 2 + 5, '-') << endl;
+  for (const auto &p : t.processes)
+  {
+    cout << p.name << "     ";
+    for (int i = 0; i < t.len; i++)
+    {
+      cout << "|";
+      if (i >= p.arrival && i < p.finish)
+        (p.status[i] == '*') ? cout << '*' : cout << '.';
+      else
+        cout << ' ';
+    }
+    cout << "|" << endl;
+  }
+  cout << string(t.len * 2 + 5, '-') << endl;
+  cout<<"\n\n";
+}
+
+void print_stats(task t)
+{
+    cout << algo[(t.policy[0] - '1')] << endl;
+    cout << "Process    |";
+    for (auto p : t.processes) {
+        cout << "  " << p.name << "  |";
+    }
+    cout << "\n";
+
+
+    cout << "Arrival    |";
+    for (auto p : t.processes) {
+        cout << setw(3) << p.arrival << "  |";
+    }
+    cout << "\n";
+
+        cout << "Service    |";
+    for (auto p : t.processes) {
+        cout << setw(3) << p.service << "  |";
+    }
+    cout << " Mean|\n";
+
+        cout << "Finish     |";
+    for (auto p : t.processes) {
+        cout << setw(3) << p.finish << "  |";
+    }
+    cout << "-----|\n";
+
+    double mean_turnaround = 0;
+    cout << "Turnaround |";
+    for (auto p : t.processes) {
+        cout << setw(3) << turnaround(p) << "  |";
+        mean_turnaround+=turnaround(p);
+    }
+    mean_turnaround/=t.p_count;
+    cout << fixed << setprecision(2) << setw(5) << mean_turnaround << "|" << endl;
+
+    double mean_norm = 0;
+    cout << "NormTurn   |";
+    for (auto p : t.processes) {
+        cout << setw(5) << norm_turn(p) << "|";
+        mean_norm+=norm_turn(p);
+    }
+    mean_norm/=t.p_count;
+    cout << fixed << setprecision(2) << setw(5) << mean_norm << "|" << endl;
+    cout<<"\n\n";
 }
