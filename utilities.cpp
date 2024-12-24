@@ -74,7 +74,7 @@ void print_trace(task &t)
     cout << (i % 10) << " ";
   }
   cout << endl;
-  cout << string(t.len * 2 + 5, '-') << endl;
+  cout << string(t.len * 2 + 8, '-') << endl;
   for (const auto &p : t.processes)
   {
     cout << p.name << "     ";
@@ -88,7 +88,7 @@ void print_trace(task &t)
     }
     cout << "|" << endl;
   }
-  cout << string(t.len * 2 + 5, '-') << endl;
+  cout << string(t.len * 2 + 8, '-') << endl;
   cout<<"\n\n";
 }
 
