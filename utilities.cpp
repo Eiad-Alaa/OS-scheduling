@@ -40,6 +40,10 @@ bool check_arrival(int time, map<int,int> &arrival_time)
      return (arrival_time.find(time) != arrival_time.end());
 }
 
+int dcmp(double a, double b)
+{
+    return fabs(a - b) <= 1e-9 ? 0 : a < b ? -1: 1;
+}
 
 vector<string> split(string s, char delimiter)
 {
