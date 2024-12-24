@@ -68,7 +68,7 @@ process init_process(vector<string> line, int index)
 
 void print_trace(task &t)
 {
-  cout << algo[(t.policy[0] - '1')] << "-1  ";
+  cout << left<< setw(6) << algo[(t.policy[0] - '1')];
   for (int i = 0; i <= t.len; ++i)
   {
     cout << (i % 10) << " ";
