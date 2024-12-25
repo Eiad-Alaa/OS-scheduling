@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "FB.cpp"
+#include "./Algorithms/FB.cpp"
 
 int main()
 {

@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-#include "utilities.cpp"
+#include "../utilities.cpp"
 
 task fcfs(task t)
 {
