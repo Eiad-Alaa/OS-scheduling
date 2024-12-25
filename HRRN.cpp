@@ -47,7 +47,7 @@ task hrrn(task t)
         htime++;
         for (auto id : time_p[htime])
         {
-          ready_run.push(t.processes[id]);
+          ready_run.push_back(t.processes[id]);
         }
       }
       temp.finish = htime;
@@ -58,7 +58,7 @@ task hrrn(task t)
       htime++;
       for (auto id : time_p[htime])
       {
-        ready_run.push(t.processes[id]);
+        ready_run.push_back(t.processes[id]);
       }
     }
   }
