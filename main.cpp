@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "FCFS.cpp"
+#include "FB.cpp"
 
 int main()
 {
@@ -17,43 +17,45 @@ int main()
   {
     getline(cin, in);
     process temp = init_process(split(in, ','), i);
-    temp.status.resize(t.len); // reserve timeline for process
+    temp.status.resize(t.len);                        // reserve timeline for process
     t.processes.push_back(temp);
   }
 
-  // print_task(t);
+  vector<string> policies = split(t.policy, ',');
 
-  switch (t.policy[0])
+  for (auto pol : policies)
   {
-  case '1':
-    t = fcfs(t);
-    break;
-  case '2':
-    t = rr(t);
-    break;
-  case '3':
-    t = spn(t);
-    break;
-  case '4':
-    t = srt(t);
-    break;
-  case '5':
-    t = hrrn(t);
-    break;
-  case '6':
-    // t = fb1(t);
-    break;
-  case '7':
-    // t = fb2i(t);
-    break;
-  case '8':
-    // t = aging(t);
-    break;
+    task temp = t;
+    temp.policy = pol;
+    switch (pol[0])
+    {
+    case '1':
+      temp = fcfs(temp);
+      break;
+    case '2':
+      temp = rr(temp);
+      break;
+    case '3':
+      temp = spn(temp);
+      break;
+    case '4':
+      temp = srt(temp);
+      break;
+    case '5':
+      temp = hrrn(temp);
+      break;
+    case '6':
+    case '7':
+      temp = fb(temp);
+      break;
+    case '8':
+      // temp = aging(temp);
+      break;
+    }
+    if (temp.type == "stats")
+      print_stats(temp);
+    else
+      print_trace(temp);
   }
-  if (t.type == "stats")
-    print_stats(t);
-  else
-    print_trace(t);
-
   return 0;
 }
