@@ -18,7 +18,7 @@ test: build test_output/
 	done
 
 	@if diff -r test_output testcases; then \
-		echo "ALL TESTS PASS 🥳"; \
+		echo "All tests passed ya 7amoo "; \
 	else \
-		echo "Some tests fail :("; \
+		echo "Some tests failed ya 7amoo :p"; \
 	fi
