@@ -1,26 +1,27 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-string algo[8] = {"FCFS", "RR-", "SPN", "SRT", "HRRN", "FB-1", "FB-2i", "Aging"};
+string algo[8] = {"FCFS", "RR-", "SPN", "SRT", "HRRN", "FB-1", "FB-2i", "Aging"};  // for printing purposes
 
 typedef struct
 {
-  int idx; // process index in task
+  int idx;             // process index in task
   char name;
   int arrival;         // arrival time
   int service;         // total service time
   int finish;          // finish time
   int rem;             // remaining service time
+  int priority;        // for aging algorithm
   vector<char> status; // process status ('.')ready, ('*')running
 } process;
 
 typedef struct
 {
-  string type;
-  string policy;
-  int len;
-  int p_count;
-  vector<process> processes;
+  string type;                  // trace or stats
+  string policy;                // algorithm
+  int len;                      // total time
+  int p_count;                  // process count per task  
+  vector<process> processes;    
 } task;
 
 int turnaround(process &p)
@@ -35,12 +36,12 @@ float norm_turn(process &p)
 }
 
 
-int dcmp(double a, double b)
+int dcmp(double a, double b)                      // comparing doubles avoiding floating error
 {
   return fabs(a - b) <= 1e-9 ? 0 : a < b ? -1: 1;
 }
 
-vector<string> split(string s, char delimiter)
+vector<string> split(string s, char delimiter)    // split string into strings
 {
   vector<string> tokens;
   stringstream ss(s);
@@ -52,19 +53,20 @@ vector<string> split(string s, char delimiter)
   return tokens;
 }
 
-process init_process(vector<string> line, int index)
+process init_process(vector<string> line, int index)  // initialize a given process
 {
   process temp;
   temp.idx = index;
   temp.name = line[0][0];
   temp.arrival = stoi(line[1]);
-  temp.finish = -1;
+  temp.finish = INT_MAX;
   temp.service = stoi(line[2]);
   temp.rem = stoi(line[2]);
+  temp.priority = stoi(line[2]);  //for aging algorithm input format
   return temp;
 }
 
-int first_nempty(vector<deque<process>> &stages)
+int first_nempty(vector<deque<process>> &stages)    // get the first non empty deque for feedback algorithm
 {
   int idx = -1;
   for (int i = 0; i < stages.size(); i++)

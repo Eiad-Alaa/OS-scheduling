@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "./Algorithms/FB.cpp"
+#include "./Algorithms/AGING.cpp"
 
 int main()
 {
@@ -49,7 +49,7 @@ int main()
       temp = fb(temp);
       break;
     case '8':
-      // temp = aging(temp);
+      temp = aging(temp);
       break;
     }
     if (temp.type == "stats")

@@ -17,8 +17,8 @@ test: build test_output/
 		./main < "$$file" > test_output/$$basename; \
 	done
 
-	@if diff -r test_output testcases; then \
-		echo "All tests passed ya 7amoo "; \
+	@if diff -q test_output testcases --exclude="*input.txt"; then \
+		echo "All tests passed ya 7amoo 🏆"; \
 	else \
-		echo "Some tests failed ya 7amoo :p"; \
+		echo "Some tests failed ya 7amoo 🤔:p"; \
 	fi
