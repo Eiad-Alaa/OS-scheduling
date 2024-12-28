@@ -18,7 +18,7 @@ struct Ratio
   {
     int cmp = dcmp(hrrn_ratio(a), hrrn_ratio(b));
     // cout<<htime<<" --> "<<a.name<<" "<<hrrn_ratio(a)<<"---"<<b.name<<" "<<hrrn_ratio(b)<<"\n";
-    return (cmp == 1 ? true : (cmp == -1 ? false : a.arrival > b.arrival));
+    return (cmp == 1 ? true : (cmp == -1 ? false : a.arrival < b.arrival));
   }
 };
 
