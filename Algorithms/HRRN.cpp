@@ -7,8 +7,8 @@ int htime = -1;
 
 double hrrn_ratio(process p)
 {
-  double wait = htime - (double)p.arrival;
-  double ratio = (wait / p.service) + 1;
+
+  double ratio = ((double)p.wait / p.service) + 1;
   return ratio;
 }
 
@@ -42,6 +42,10 @@ task hrrn(task t)
       ready_run.pop_front();
       while (temp.rem != 0)
       {
+        for(auto &p:ready_run)
+        {
+          p.wait++;
+        }
         temp.rem--;
         temp.status[htime] = '*';
         htime++;

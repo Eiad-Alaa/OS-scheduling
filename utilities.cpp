@@ -12,6 +12,7 @@ typedef struct
   int finish;          // finish time
   int rem;             // remaining service time
   int priority;        // for aging algorithm
+  int wait;
   vector<char> status; // process status ('.')ready, ('*')running
 } process;
 
@@ -60,6 +61,7 @@ process init_process(vector<string> line, int index)  // initialize a given proc
   temp.name = line[0][0];
   temp.arrival = stoi(line[1]);
   temp.finish = INT_MAX;
+  temp.wait = 0;
   temp.service = stoi(line[2]);
   temp.rem = stoi(line[2]);
   temp.priority = stoi(line[2]);  //for aging algorithm input format

@@ -13,6 +13,8 @@ struct AGE
 
 task aging(task t)
 {
+  vector<string> policy_q = split(t.policy, '-'); // split 2-4 into "2", "4"
+  int q = stoi(policy_q[1]);                      // get q
   vector<vector<int>> time_p(t.len + 3);
   int time = -1;
   for (auto p : t.processes)
@@ -31,17 +33,22 @@ task aging(task t)
       process temp = ready_run[0];
       ready_run.pop_front();
       // cout << time << " ---> " << temp.name << ": " << temp.priority << "\n";
-      temp.status[time] = '*';
-      time++;
-      temp.arrival = time;
-      temp.priority = t.processes[temp.idx].priority;           //restore original priority
-      for (auto id : time_p[time])
+      int rest = q;
+      while (rest != 0 && time <= t.len)
       {
-        ready_run.push_back(t.processes[id]);
-      }
-      for(auto &p : ready_run)                                  // increment priority of all ready processes
-      {
-        p.priority++;
+        rest--;
+        temp.status[time] = '*';
+        time++;
+        temp.arrival = time;
+        temp.priority = t.processes[temp.idx].priority; // restore original priority
+        for (auto id : time_p[time])
+        {
+          ready_run.push_back(t.processes[id]);
+        }
+        for (auto &p : ready_run) // increment priority of all ready processes
+        {
+          p.priority++;
+        }
       }
       ready_run.push_back(temp);
     }
@@ -52,6 +59,10 @@ task aging(task t)
       {
         ready_run.push_back(t.processes[id]);
       }
+      for (auto &p : ready_run) // increment priority of all ready processes
+        {
+          p.priority++;
+        }
     }
   }
   for (auto p : ready_run)
